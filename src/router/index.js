@@ -4,6 +4,20 @@ let authUser = localStorage.getItem("bearerToken") === null ? false : true
 
 const routes = [
   {
+    path: '/home',
+    name: 'index',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/GuestHome.vue'),
+    beforeEnter: (to, from, next) => {
+      if (authUser) {
+        return next({
+          name: 'home'
+        })
+      }
+
+      next()
+    }
+  },
+  {
     path: '/',
     name: 'home',
     component: () => import(/* webpackChunkName: "about" */ '../views/App/AuthHome.vue'),
@@ -60,13 +74,13 @@ const routes = [
     }
   },
   {
-    path: '/home',
-    name: 'index',
-    component: () => import(/* webpackChunkName: "about" */ '../views/App/GuestHome.vue'),
+    path: '/confirm-story',
+    name: 'confirm_story',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/Editor/ConfirmStoryView.vue'),
     beforeEnter: (to, from, next) => {
-      if (authUser) {
+      if (!authUser) {
         return next({
-          name: 'home'
+          name: 'login'
         })
       }
 

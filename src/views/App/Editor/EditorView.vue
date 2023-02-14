@@ -1,24 +1,25 @@
 <script setup>
 import EditorLayout from '@/layouts/EditorLayout.vue';
+import router from "@/router";
 import { ref } from 'vue';
-import { postStory } from '@/services/functions'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.bubble.css';
 
 const title = ref('')
 const story = ref('')
-let userName = localStorage.getItem("userName")
-let userId = localStorage.getItem("userId")
+
+title.value = localStorage.getItem("title") != null ? localStorage.getItem("title") : ''
+story.value = localStorage.getItem("content") != null ? localStorage.getItem("content") : ''
 
 const postContent = () => {
-    event.preventDefault()
-    let parameters = {
-        title: title.value,
-        content: story.value,
-        editor_id: userId,
-        editor_name: userName
+    if (title.value == '' || story.value == '' || title.value.includes("<h2><br></h2>") || story.value.includes("<p><br></p>") || story.value.includes("<p>  </p>") || title.value.includes("<h2> </h2>")) {
+        router.push('/new-story')
+    } else {
+        event.preventDefault()
+        localStorage.setItem('title', title.value.trim())
+        localStorage.setItem('content', story.value.trim())
+        router.push('/confirm-story')
     }
-    postStory(parameters)
 }
 </script>
 

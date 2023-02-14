@@ -43,6 +43,8 @@ export function postStory(parameters) {
     axios.post(url + 'stories', parameters).then((response) => {
         let status = response.data[0]['status'];
         if (status === 'success') {
+            localStorage.removeItem('title');
+            localStorage.removeItem('content');
             router.push('/')
         } else {
             let list = '';
