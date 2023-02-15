@@ -4,22 +4,38 @@ import { postStory } from '@/services/functions'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.bubble.css';
 
+let tags = ref('')
+let image = ref('');
 let title = localStorage.getItem("title")
 let story = localStorage.getItem("content")
-let userName = localStorage.getItem("userName")
 let userId = localStorage.getItem("userId")
-let tags = ref('')
+let userName = localStorage.getItem("userName")
+
+const onFileChange = (e) => {
+    image.value = e.target.files[0];
+};
 
 const postContent = () => {
     event.preventDefault()
+    const formdata = new FormData();
+    formdata.append('tags', tags.value);
+    formdata.append('image', image.value);
+    formdata.append('title', title);
+    formdata.append('content', story);
+    formdata.append('editor_id', userId);
+    formdata.append('editor_name', userName);
+
+    /*
     let parameters = {
         tags: tags.value,
+        image: image.value,
         title: title,
         content: story,
         editor_id: userId,
         editor_name: userName
     }
-    postStory(parameters)
+    */
+    postStory(formdata)
 }
 </script>
 
@@ -68,7 +84,7 @@ const postContent = () => {
                                         <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX.
                                             800x400px)</p>
                                     </div>
-                                    <input id="dropzone-file" type="file" @change="previewFiles" class="hidden" />
+                                    <input id="dropzone-file" type="file" @change="onFileChange" class="hidden" />
                                 </label>
                             </div>
                         </div>

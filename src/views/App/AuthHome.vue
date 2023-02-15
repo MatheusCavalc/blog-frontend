@@ -39,18 +39,30 @@ onMounted(getStories)
                                 <p class="block">{{ moment(story.created_at).format('MMMM D, YYYY') }}</p>
                             </div>
 
-                            <div class="container-home">
-                                <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }"
-                                    class="cursor-pointer">
-                                    <QuillEditor v-model:content="story.title" contentType="html" readOnly="true"
-                                        theme="bubble" :toolbar="[[{ 'header': 2 }]]" />
-                                </router-link>
+                            <div class="flex overflow-hidden">
 
-                                <div id="text" class="session-content -mt-3 my-5">
+                                <div class="flex-initial">
+                                    <div class="container-home">
+                                        <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }"
+                                            class="cursor-pointer">
+                                            <QuillEditor v-model:content="story.title" contentType="html"
+                                                readOnly="true" theme="bubble" :toolbar="[[{ 'header': 2 }]]" />
+                                        </router-link>
+
+                                        <div id="text" class="session-content -mt-3 my-5">
+                                            <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }">
+                                                <QuillEditor v-model:content="story.content" contentType="html"
+                                                    readOnly="true" theme="bubble"
+                                                    :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
+                                            </router-link>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-initial ml-20">
                                     <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }">
-                                        <QuillEditor v-model:content="story.content" contentType="html" readOnly="true"
-                                            theme="bubble"
-                                            :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
+                                        <img class="object-none w-20 h-20"
+                                            :src="`http://localhost/api/image/${story.image}`" />
                                     </router-link>
                                 </div>
                             </div>
@@ -74,8 +86,8 @@ onMounted(getStories)
     font-weight: 400;
     font-style: normal;
     font-size: 19px;
-    max-height: 70px;
-    max-width: 500px;
+    height: 70px;
+    width: 480px;
     line-height: 24px;
     letter-spacing: -.003em;
     overflow: hidden;

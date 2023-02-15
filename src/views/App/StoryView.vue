@@ -11,6 +11,7 @@ const route = useRoute()
 
 let id = route.params.id
 let title = ref('')
+let image = ref('')
 let content = ref('')
 let editor_name = ref('')
 let created_at = ref('')
@@ -18,6 +19,7 @@ let created_at = ref('')
 const getStory = () => {
     axios.get('http://localhost/api/stories/' + id).then((response) => {
         title.value = response.data['title']
+        image.value = response.data['image']
         content.value = response.data['content']
         editor_name.value = response.data['editor_name']
         created_at.value = response.data['created_at']
