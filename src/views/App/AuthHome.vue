@@ -1,6 +1,5 @@
 <script setup>
 import AuthLayout from '@/layouts/AuthLayout.vue';
-//import router from "@/router";
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import moment from 'moment';
@@ -13,7 +12,6 @@ const getStories = () => {
     axios.get('http://localhost/api/stories')
         .then((response) => {
             stories.value = response.data
-            console.log(response)
         })
 }
 
@@ -61,7 +59,7 @@ onMounted(getStories)
 
                                 <div class="flex-initial ml-20">
                                     <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }">
-                                        <img class="object-none w-20 h-20"
+                                        <img class="object-scale-down w-20 h-20"
                                             :src="`http://localhost/api/image/${story.image}`" />
                                     </router-link>
                                 </div>

@@ -18,10 +18,8 @@ export function login(parameters) {
     event.preventDefault()
     axios.post(url + 'auth/login', parameters).then((response) => {
         localStorage.setItem('bearerToken', response.data.data.token)
-        localStorage.setItem('userEmail', response.data.data.user_email)
         localStorage.setItem('userName', response.data.data.user_name)
-        localStorage.setItem('canWrite', response.data.data.user_write)
-        localStorage.setItem('userId', response.data.data.user_id)
+        //localStorage.setItem('userEmail', response.data.data.user_email)
         setAuthHeader(response.data.data.token)
         window.location.replace('/');
     }).catch(error => {

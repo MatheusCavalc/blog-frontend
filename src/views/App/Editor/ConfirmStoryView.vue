@@ -8,8 +8,6 @@ let tags = ref('')
 let image = ref('');
 let title = localStorage.getItem("title")
 let story = localStorage.getItem("content")
-let userId = localStorage.getItem("userId")
-let userName = localStorage.getItem("userName")
 
 const onFileChange = (e) => {
     image.value = e.target.files[0];
@@ -22,19 +20,7 @@ const postContent = () => {
     formdata.append('image', image.value);
     formdata.append('title', title);
     formdata.append('content', story);
-    formdata.append('editor_id', userId);
-    formdata.append('editor_name', userName);
 
-    /*
-    let parameters = {
-        tags: tags.value,
-        image: image.value,
-        title: title,
-        content: story,
-        editor_id: userId,
-        editor_name: userName
-    }
-    */
     postStory(formdata)
 }
 </script>
