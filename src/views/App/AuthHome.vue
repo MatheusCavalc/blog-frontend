@@ -1,5 +1,6 @@
 <script setup>
 import AuthLayout from '@/layouts/AuthLayout.vue';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import moment from 'moment';
@@ -8,10 +9,14 @@ import '@vueup/vue-quill/dist/vue-quill.bubble.css';
 
 let stories = ref('')
 
+let loading = ref('')
+loading.value = true
+
 const getStories = () => {
     axios.get('http://localhost/api/stories')
         .then((response) => {
             stories.value = response.data
+            loading.value = false
         })
 }
 
@@ -23,53 +28,62 @@ onMounted(getStories)
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-16 mt-16">
             <div class="bg-white overflow-hidden sm:rounded-lg">
 
-                <div class="grid grid-cols-3 gap-4 mt-12">
-                    <div class="col-span-2">
+                <template v-if="loading">
+                    <LoadingSpinner />
+                </template>
 
-                        <div v-for="story in stories" :key="story.id" class="border-b border-b-gray-200 my-7">
-                            <div class="flex flex-row items-left">
-                                <p class="ml-4 block">
-                                    <img class="h-6 w-6 rounded-full"
-                                        src="https://avatars.githubusercontent.com/u/105112560?v=4" alt="sexmaster" />
-                                </p>
-                                <p class="block ml-2">{{ story.editor_name }}</p>
-                                <p class="block mx-1 -my-1 text-gray-500">.</p>
-                                <p class="block">{{ moment(story.created_at).format('MMMM D, YYYY') }}</p>
-                            </div>
+                <template v-else>
+                    <div class="grid grid-cols-3 gap-4 mt-12">
+                        <div class="col-span-2">
 
-                            <div class="flex overflow-hidden">
+                            <div v-for="story in stories" :key="story.id" class="border-b border-b-gray-200 my-7">
+                                <div class="flex flex-row items-left">
+                                    <p class="ml-4 block">
+                                        <img class="h-6 w-6 rounded-full"
+                                            src="https://avatars.githubusercontent.com/u/105112560?v=4"
+                                            alt="sexmaster" />
+                                    </p>
+                                    <p class="block ml-2">{{ story.editor_name }}</p>
+                                    <p class="block mx-1 -my-1 text-gray-500">.</p>
+                                    <p class="block">{{ moment(story.created_at).format('MMMM D, YYYY') }}</p>
+                                </div>
 
-                                <div class="flex-initial">
-                                    <div class="container-home">
-                                        <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }"
-                                            class="cursor-pointer">
-                                            <QuillEditor v-model:content="story.title" contentType="html"
-                                                readOnly="true" theme="bubble" :toolbar="[[{ 'header': 2 }]]" />
-                                        </router-link>
+                                <div class="flex overflow-hidden">
 
-                                        <div id="text" class="session-content -mt-3 my-5">
-                                            <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }">
-                                                <QuillEditor v-model:content="story.content" contentType="html"
-                                                    readOnly="true" theme="bubble"
-                                                    :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
+                                    <div class="flex-initial">
+                                        <div class="container-home">
+                                            <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }"
+                                                class="cursor-pointer">
+                                                <QuillEditor v-model:content="story.title" contentType="html"
+                                                    readOnly="true" theme="bubble" :toolbar="[[{ 'header': 2 }]]" />
                                             </router-link>
+
+                                            <div id="text" class="session-content -mt-3 my-5">
+                                                <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }">
+                                                    <QuillEditor v-model:content="story.content" contentType="html"
+                                                        readOnly="true" theme="bubble"
+                                                        :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
+                                                </router-link>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="flex-initial ml-20">
-                                    <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }">
-                                        <img class="object-scale-down w-20 h-20"
-                                            :src="`http://localhost/api/image/${story.image}`" />
-                                    </router-link>
+                                    <template v-if="story.image">
+                                        <div class="flex-initial ml-20">
+                                            <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }">
+                                                <img class="object-scale-down w-20 h-20"
+                                                    :src="`http://localhost/api/image/${story.image}`" />
+                                            </router-link>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
+
                         </div>
 
+                        <div class="">09</div>
                     </div>
-
-                    <div class="">09</div>
-                </div>
+                </template>
 
             </div>
         </div>

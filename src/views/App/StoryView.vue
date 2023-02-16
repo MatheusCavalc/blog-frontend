@@ -1,5 +1,6 @@
 <script setup>
 import AuthLayout from '@/layouts/AuthLayout.vue';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.bubble.css';
 import { ref, onMounted } from 'vue';
@@ -16,6 +17,9 @@ let content = ref('')
 let editor_name = ref('')
 let created_at = ref('')
 
+let loading = ref('')
+loading.value = true
+
 const getStory = () => {
     axios.get('http://localhost/api/stories/' + id).then((response) => {
         title.value = response.data['title']
@@ -23,6 +27,7 @@ const getStory = () => {
         content.value = response.data['content']
         editor_name.value = response.data['editor_name']
         created_at.value = response.data['created_at']
+        loading.value = false
     })
 }
 
@@ -35,33 +40,40 @@ onMounted(getStory)
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-16 mt-16">
             <div class="bg-white overflow-hidden sm:rounded-lg">
 
-                <div class="grid grid-cols-3 gap-4 mt-12">
-                    <div class="col-span-2">
-                        <div class="flex flex-row items-left">
-                            <p class="ml-4 block">
-                                <img class="h-12 w-12 rounded-full"
-                                    src="https://avatars.githubusercontent.com/u/105112560?v=4" alt="sexmaster" />
-                            </p>
-                            <div class="absolute ml-20">
-                                <p class="block">{{ editor_name }}</p>
-                                <p class="mt-0.5 text-gray-500">{{ moment(created_at).format('MMMM D, YYYY') }}</p>
-                            </div>
-                        </div>
-                        <div class="my-7">
-                            <div class="">
-                                <QuillEditor v-model:content="title" contentType="html" readOnly="true" theme="bubble"
-                                    :toolbar="[[{ 'header': 2 }]]" />
-                            </div>
+                <template v-if="loading">
+                    <LoadingSpinner />
+                </template>
 
-                            <div id="text" class="session-read -mt-1 my-5">
-                                <QuillEditor v-model:content="content" contentType="html" readOnly="true" theme="bubble"
-                                    :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
+                <template v-else>
+                    <div class="grid grid-cols-3 gap-4 mt-12">
+                        <div class="col-span-2">
+                            <div class="flex flex-row items-left">
+                                <p class="ml-4 block">
+                                    <img class="h-12 w-12 rounded-full"
+                                        src="https://avatars.githubusercontent.com/u/105112560?v=4" alt="sexmaster" />
+                                </p>
+                                <div class="absolute ml-20">
+                                    <p class="block">{{ editor_name }}</p>
+                                    <p class="mt-0.5 text-gray-500">{{ moment(created_at).format('MMMM D, YYYY') }}</p>
+                                </div>
+                            </div>
+                            <div class="my-7">
+                                <div class="">
+                                    <QuillEditor v-model:content="title" contentType="html" readOnly="true"
+                                        theme="bubble" :toolbar="[[{ 'header': 2 }]]" />
+                                </div>
+
+                                <div id="text" class="session-read -mt-1 my-5">
+                                    <QuillEditor v-model:content="content" contentType="html" readOnly="true"
+                                        theme="bubble"
+                                        :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
+                                </div>
                             </div>
                         </div>
+
+                        <div class="">09</div>
                     </div>
-
-                    <div class="">09</div>
-                </div>
+                </template>
             </div>
         </div>
     </AuthLayout>
