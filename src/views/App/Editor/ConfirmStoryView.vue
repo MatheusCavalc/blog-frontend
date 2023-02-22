@@ -1,13 +1,11 @@
 <script setup>
 import { ref } from 'vue';
 import { postStory } from '@/services/functions'
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.bubble.css';
 
 let tags = ref('')
 let image = ref('');
-let title = localStorage.getItem("title")
-let story = localStorage.getItem("content")
+let title_preview = ''
+let content_preview = ''
 
 const isButtonDisabled = ref('')
 isButtonDisabled.value = false
@@ -26,8 +24,11 @@ const postContent = () => {
         let formdata = new FormData();
         formdata.append('tags', tags.value);
         formdata.append('image', image.value);
-        formdata.append('title', title);
-        formdata.append('content', story);
+        formdata.append('title', localStorage.getItem("title"));
+        formdata.append('content', localStorage.getItem("content"));
+
+        formdata.append('title_preview', title_preview);
+        formdata.append('content_preview', content_preview);
 
         postStory(formdata)
     }
@@ -37,12 +38,12 @@ const postContent = () => {
 </script>
 
 <template>
-    <nav class="bg-white px-2 sm:px-4 py-1 rounded">
-        <div class="max-w-full flex flex-wrap items-center justify-between mr-36">
+    <nav class="px-2 py-1 bg-white rounded sm:px-4">
+        <div class="flex flex-wrap items-center justify-between max-w-full mr-36">
             <p></p>
             <div class="hidden w-full md:block md:w-auto" id="navbar-default">
                 <ul
-                    class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-white md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
+                    class="flex flex-col p-4 mt-4 bg-white border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
                     <li>
                         <router-link to="/new-story">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -57,17 +58,17 @@ const postContent = () => {
     </nav>
 
     <div>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-36 mt-20 mb-20">
-            <div class="bg-white overflow-hidden sm:rounded-lg">
+        <div class="mx-auto mt-20 mb-20 max-w-7xl sm:px-6 lg:px-36">
+            <div class="overflow-hidden bg-white sm:rounded-lg">
 
                 <div class="grid grid-cols-2 gap-7">
                     <div>
                         <p class="font-semibold">Story Preview</p>
 
-                        <div class="w-96 h-48 my-2">
+                        <div class="h-48 my-2 w-96">
                             <div class="flex items-center justify-center">
                                 <label for="dropzone-file"
-                                    class="flex flex-col items-center justify-center w-96 h-48 rounded-lg cursor-pointer bg-gray-50">
+                                    class="flex flex-col items-center justify-center h-48 rounded-lg cursor-pointer w-96 bg-gray-50">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                         <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none"
                                             stroke="currentColor" viewBox="0 0 24 24"
@@ -87,15 +88,16 @@ const postContent = () => {
                         </div>
 
                         <div class="container-confirm">
-                            <div class="">
-                                <QuillEditor v-model:content="title" contentType="html" readOnly="true" theme="bubble"
-                                    :toolbar="[[{ 'header': 2 }]]" />
+                            <div class="my-3">
+                                <input type="text" v-model="title_preview" id="title_preview" maxlength="100"
+                                class="text-gray-900 text-xl block w-full p-2.5 font-bold"
+                                placeholder="Title Preview" required>
                             </div>
                             <hr class="h-px -m-2 bg-gray-200 border-0 dark:bg-gray-700">
-                            <div class="">
-                                <QuillEditor v-model:content="story" contentType="html" readOnly="true" theme="bubble"
-                                    :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
-
+                            <div class="my-3">
+                                <input type="text" v-model="content_preview" id="content_preview" maxlength="140"
+                                class="text-gray-900 sm:text-sm block w-full p-2.5"
+                                placeholder="Content Preview" required>
                             </div>
                             <hr class="h-px -m-2 bg-gray-200 border-0 dark:bg-gray-700">
                         </div>
@@ -112,19 +114,19 @@ const postContent = () => {
 
                         <div>
                             <input type="text" id="search-navbar" v-model="tags"
-                                class="block w-full py-4 pl-3 text-sm mt-3 text-gray-900 bg-gray-50 border border-gray-300"
+                                class="block w-full py-4 pl-3 mt-3 text-sm text-gray-900 border border-gray-300 bg-gray-50"
                                 placeholder="Add a topic...">
                         </div>
 
                         <template v-if="!isButtonDisabled">
-                            <button :disabled="isButtonDisabled" @click="postContent" class="mt-4 bg-green-600 rounded-full p-3 text-white text-sm">
+                            <button :disabled="isButtonDisabled" @click="postContent" class="p-3 mt-4 text-sm text-white bg-green-600 rounded-full">
                                 Publish now
                             </button>
                         </template>
 
                         <template v-else>
                             <button disabled type="button"
-                                class="mt-4 bg-green-400 rounded-full p-3 text-white text-sm">
+                                class="p-3 mt-4 text-sm text-white bg-green-400 rounded-full">
                                 <svg aria-hidden="true" role="status"
                                     class="inline w-4 h-4 mx-1 text-white animate-spin" viewBox="0 0 100 101"
                                     fill="none" xmlns="http://www.w3.org/2000/svg">

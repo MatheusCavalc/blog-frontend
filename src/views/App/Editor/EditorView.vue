@@ -12,40 +12,34 @@ title.value = localStorage.getItem("title") != null ? localStorage.getItem("titl
 story.value = localStorage.getItem("content") != null ? localStorage.getItem("content") : ''
 
 const postContent = () => {
-    if (title.value == '' || story.value == '' || title.value.includes("<h2><br></h2>") || story.value.includes("<p><br></p>") || story.value.includes("<p>  </p>") || title.value.includes("<h2> </h2>")) {
-        router.push('/new-story')
-    } else {
-        event.preventDefault()
-        localStorage.setItem('title', title.value.trim())
-        localStorage.setItem('content', story.value.trim())
-        router.push('/confirm-story')
-    }
+    event.preventDefault()
+    localStorage.setItem('title', title.value.trim())
+    localStorage.setItem('content', story.value.trim())
+    router.push('/confirm-story')
 }
 </script>
 
 <template>
     <EditorLayout>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-28 mt-2">
-            <div class="bg-white overflow-hidden sm:rounded-lg pt-10 pb-32 px-32">
+        <div class="mx-auto mt-2 max-w-7xl sm:px-6 lg:px-28">
+            <div class="px-32 pt-10 pb-32 overflow-hidden bg-white sm:rounded-lg">
 
                 <div class="title">
                     <QuillEditor v-model:content="title" contentType="html" theme="bubble" placeholder="Title"
                         :toolbar="[[{ 'header': 2 }]]" />
                 </div>
 
-                <div id="text" class="session-write mt-6">
-                    <QuillEditor v-model:content="story" contentType="html" theme="bubble"
-                        placeholder="Tell your story…"
+                <div id="text" class="mt-6 session-write">
+                    <QuillEditor v-model:content="story" contentType="html" theme="bubble" placeholder="Tell your story…"
                         :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
                 </div>
             </div>
 
-            <button @click="postContent" class="bg-green-600 text-white text-sm font-bold ml-9 py-2 px-5 rounded-full">
+            <button @click="postContent" class="px-5 py-2 text-sm font-bold text-white bg-green-600 rounded-full ml-9">
                 Publish
             </button>
         </div>
     </EditorLayout>
-
 </template>
 
 <style>
