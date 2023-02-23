@@ -55,6 +55,12 @@ onMounted(getStories)
                                                 <div class="my-3 ml-4 session-content">
                                                     <p class="">{{ story.content_preview }}</p>
                                                 </div>
+
+                                                <div class="mt-10 ml-4">
+                                                    <span class="bg-gray-100 text-gray-800 text-sm mr-2 px-2.5 py-0.5 rounded-lg">
+                                                        {{ story.tags[0] }}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
 

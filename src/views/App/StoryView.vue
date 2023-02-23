@@ -12,6 +12,7 @@ const route = useRoute()
 
 let id = route.params.id
 let title = ref('')
+let tags = ref('')
 let image = ref('')
 let content = ref('')
 let editor_name = ref('')
@@ -23,6 +24,7 @@ loading.value = true
 const getStory = () => {
     axios.get('http://localhost/api/stories/' + id).then((response) => {
         title.value = response.data['title']
+        tags.value = response.data['tags']
         image.value = response.data['image']
         content.value = response.data['content']
         editor_name.value = response.data['editor_name']
@@ -59,14 +61,20 @@ onMounted(getStory)
                             </div>
                             <div class="my-7">
                                 <div class="">
-                                    <QuillEditor v-model:content="title" contentType="html" readOnly="true"
-                                        theme="bubble" :toolbar="[[{ 'header': 2 }]]" />
+                                    <QuillEditor v-model:content="title" contentType="html" readOnly="true" theme="bubble"
+                                        :toolbar="[[{ 'header': 2 }]]" />
                                 </div>
 
                                 <div id="text" class="session-read -mt-1 my-5">
-                                    <QuillEditor v-model:content="content" contentType="html" readOnly="true"
-                                        theme="bubble"
+                                    <QuillEditor v-model:content="content" contentType="html" readOnly="true" theme="bubble"
                                         :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
+                                </div>
+
+                                <div class="ml-2 mt-6">
+                                    <span v-for="tag in tags" :key="tag.id"
+                                        class="bg-gray-100 text-gray-800 text-sm mr-2 px-2.5 py-2 rounded-full">
+                                        {{ tag }}
+                                    </span>
                                 </div>
                             </div>
                         </div>

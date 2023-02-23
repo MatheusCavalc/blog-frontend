@@ -1,4 +1,5 @@
 <script setup>
+import TagInput from '@/components/TagInput.vue';
 import { ref } from 'vue';
 import { postStory } from '@/services/functions'
 
@@ -14,8 +15,12 @@ const onFileChange = (e) => {
     image.value = e.target.files[0];
 };
 
+const addTags = (tag) => {
+    tags.value = tag;
+}
+
 const postContent = () => {
-    if (tags.value.trim().length === 0) {
+    if (tags.value.length < 1) {
         isButtonDisabled.value = false
         alert('Tags field dont be null')
     } else {
@@ -113,9 +118,7 @@ const postContent = () => {
                         <p class="my-2"> Add or change topics (up to 5) so readers know what your story is about</p>
 
                         <div>
-                            <input type="text" id="search-navbar" v-model="tags"
-                                class="block w-full py-4 pl-3 mt-3 text-sm text-gray-900 border border-gray-300 bg-gray-50"
-                                placeholder="Add a topic...">
+                            <TagInput @send-data="addTags"/>
                         </div>
 
                         <template v-if="!isButtonDisabled">

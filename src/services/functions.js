@@ -6,9 +6,8 @@ let url = process.env.VUE_APP_API_URL_BASE
 
 export function register(parameters) {
     event.preventDefault()
-    axios.post(url + 'auth/register', parameters).then((response) => {
-        console.log(response)
-        window.location.replace('/login ');
+    axios.post(url + 'auth/register', parameters).then(() => {
+        window.location.replace('/login');
     }).catch(error => {
         console.log(error)
     });
