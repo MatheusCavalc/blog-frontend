@@ -32,6 +32,20 @@ const routes = [
     }
   },
   {
+    path: '/following',
+    name: 'following',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/FollowingHome.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!authUser) {
+        return next({
+          name: 'index'
+        })
+      }
+
+      next()
+    }
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "about" */ '../views/Auth/LoginView.vue'),
