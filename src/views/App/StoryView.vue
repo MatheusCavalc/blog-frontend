@@ -1,6 +1,7 @@
 <script setup>
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import AuthorInfos from '@/components/AuthorInfos.vue';
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.bubble.css';
 import { ref, onMounted } from 'vue';
@@ -39,7 +40,7 @@ onMounted(getStory)
 
 <template>
     <AuthLayout>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-16 mt-16">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-16">
             <div class="bg-white overflow-hidden sm:rounded-lg">
 
                 <template v-if="loading">
@@ -47,8 +48,8 @@ onMounted(getStory)
                 </template>
 
                 <template v-else>
-                    <div class="grid grid-cols-3 gap-4 mt-12">
-                        <div class="col-span-2">
+                    <div class="grid grid-cols-3 gap-10">
+                        <div class="col-span-2 mt-28">
                             <div class="flex flex-row items-left">
                                 <p class="ml-4 block">
                                     <img class="h-12 w-12 rounded-full"
@@ -56,7 +57,7 @@ onMounted(getStory)
                                 </p>
                                 <div class="absolute ml-20">
                                     <p class="block">{{ editor_name }}</p>
-                                    <p class="mt-0.5 text-gray-500">{{ moment(created_at).format('MMMM D, YYYY') }}</p>
+                                    <p class="mt-0.5 text-gray-500">{{ moment(created_at).format('MMM D, YYYY') }}</p>
                                 </div>
                             </div>
                             <div class="my-7">
@@ -79,7 +80,9 @@ onMounted(getStory)
                             </div>
                         </div>
 
-                        <div class="">09</div>
+                        <div class="border-l border-l-gray-200 h-screen">
+                            <AuthorInfos :name="editor_name" />
+                        </div>
                     </div>
                 </template>
             </div>
