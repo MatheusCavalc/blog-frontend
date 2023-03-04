@@ -1,7 +1,38 @@
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
+import axios from 'axios';
 
-const props = defineProps(['name']);
+const props = defineProps(['name', 'userId', 'is_follow']);
+
+let button_label = ref('')
+let is_follow = ref('')
+
+button_label.value = props.is_follow ? 'Unfollow' : 'Follow'
+is_follow.value = props.is_follow ? true : false
+
+const follow = () => {
+    event.preventDefault()
+    axios.post('http://localhost/api/follows', {
+        userId: props.userId,
+    }).then(() => {
+        button_label.value = 'Unfollow'
+        is_follow.value = true
+    }).catch(error => {
+        console.log(error)
+    });
+}
+
+const unfollow = () => {
+    event.preventDefault()
+    axios.post('http://localhost/api/unfollows', {
+        userId: props.userId,
+    }).then(() => {
+        button_label.value = 'Follow'
+        is_follow.value = false
+    }).catch(error => {
+        console.log(error)
+    });
+}
 </script>
 
 <template>
@@ -25,9 +56,19 @@ const props = defineProps(['name']);
             </p>
 
             <div class="flex mt-5">
-                <button class="block px-4 py-2 text-base tracking-tighter text-white bg-gray-500 rounded-full">
-                    Follow
-                </button>
+                <template v-if="is_follow">
+                    <button @click="unfollow"
+                        class="block px-4 py-2 text-base tracking-tighter text-white bg-gray-500 rounded-full">
+                        {{ button_label }}
+                    </button>
+                </template>
+
+                <template v-else>
+                    <button @click="follow"
+                        class="block px-4 py-2 text-base tracking-tighter text-white bg-gray-500 rounded-full">
+                        {{ button_label }}
+                    </button>
+                </template>
 
                 <button class="block ml-2 px-2.5 py-1 text-base tracking-tight text-white bg-gray-500 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

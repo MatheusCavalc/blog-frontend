@@ -12,25 +12,17 @@ import axios from "axios";
 const route = useRoute()
 
 let id = route.params.id
-let title = ref('')
-let tags = ref('')
-let image = ref('')
-let content = ref('')
-let editor_name = ref('')
-let created_at = ref('')
 
+let is_follow = ref('')
+let story = ref('')
 let loading = ref('')
 loading.value = true
 
 const getStory = () => {
     axios.get('http://localhost/api/stories/' + id).then((response) => {
-        title.value = response.data['title']
-        tags.value = response.data['tags']
-        image.value = response.data['image']
-        content.value = response.data['content']
-        editor_name.value = response.data['editor_name']
-        created_at.value = response.data['created_at']
+        story.value = response.data.story
         loading.value = false
+        is_follow.value = response.data.is_follow
     })
 }
 
@@ -56,23 +48,23 @@ onMounted(getStory)
                                         src="https://avatars.githubusercontent.com/u/105112560?v=4" alt="sexmaster" />
                                 </p>
                                 <div class="absolute ml-20">
-                                    <p class="block">{{ editor_name }}</p>
-                                    <p class="mt-0.5 text-gray-500">{{ moment(created_at).format('MMM D, YYYY') }}</p>
+                                    <p class="block">{{ story.editor_name }}</p>
+                                    <p class="mt-0.5 text-gray-500">{{ moment(story.created_at).format('MMM D, YYYY') }}</p>
                                 </div>
                             </div>
                             <div class="my-7">
                                 <div class="">
-                                    <QuillEditor v-model:content="title" contentType="html" readOnly="true" theme="bubble"
+                                    <QuillEditor v-model:content="story.title" contentType="html" readOnly="true" theme="bubble"
                                         :toolbar="[[{ 'header': 2 }]]" />
                                 </div>
 
                                 <div id="text" class="session-read -mt-1 my-5">
-                                    <QuillEditor v-model:content="content" contentType="html" readOnly="true" theme="bubble"
+                                    <QuillEditor v-model:content="story.content" contentType="html" readOnly="true" theme="bubble"
                                         :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
                                 </div>
 
                                 <div class="ml-2 mt-6">
-                                    <span v-for="tag in tags" :key="tag.id"
+                                    <span v-for="tag in story.tags" :key="tag.id"
                                         class="bg-gray-100 text-gray-800 text-sm mr-2 px-2.5 py-2 rounded-full">
                                         {{ tag }}
                                     </span>
@@ -81,7 +73,7 @@ onMounted(getStory)
                         </div>
 
                         <div class="border-l border-l-gray-200 h-screen">
-                            <AuthorInfos :name="editor_name" />
+                            <AuthorInfos :name="story.editor_name" :userId="story.user_id" :is_follow="is_follow" />
                         </div>
                     </div>
                 </template>
