@@ -16,6 +16,7 @@ let id = route.params.id
 let is_follow = ref('')
 let story = ref('')
 let loading = ref('')
+let can_follow = ref('')
 loading.value = true
 
 const getStory = () => {
@@ -23,6 +24,7 @@ const getStory = () => {
         story.value = response.data.story
         loading.value = false
         is_follow.value = response.data.is_follow
+        can_follow.value = response.data.can_follow
     })
 }
 
@@ -73,7 +75,7 @@ onMounted(getStory)
                         </div>
 
                         <div class="border-l border-l-gray-200 h-screen">
-                            <AuthorInfos :name="story.editor_name" :userId="story.user_id" :is_follow="is_follow" />
+                            <AuthorInfos :name="story.editor_name" :userId="story.user_id" :is_follow="is_follow" :can_follow="can_follow" />
                         </div>
                     </div>
                 </template>

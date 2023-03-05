@@ -2,7 +2,7 @@
 import { defineProps, ref } from 'vue';
 import axios from 'axios';
 
-const props = defineProps(['name', 'userId', 'is_follow']);
+const props = defineProps(['name', 'userId', 'is_follow', 'can_follow']);
 
 let button_label = ref('')
 let is_follow = ref('')
@@ -55,7 +55,7 @@ const unfollow = () => {
                 Front End Engineer @ Glovo // Vue.js Athens Meetup Coorganizer
             </p>
 
-            <div class="flex mt-5">
+            <div v-if="props.can_follow" class="flex mt-5">
                 <template v-if="is_follow">
                     <button @click="unfollow"
                         class="block px-4 py-2 text-base tracking-tighter text-white bg-gray-500 rounded-full">

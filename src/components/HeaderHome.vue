@@ -8,10 +8,10 @@ let following = ref('')
 const style = () => {
     if (currentUrl == "/") {
         home.value = "ml-8 mb-1.5 text-sm border-b border-b-black pb-[18px] tracking-tight"
-        following.value = 'ml-8 text-sm tracking-tight text-gray-500'
+        following.value = 'ml-8 text-sm tracking-tight text-gray-500 hover:text-black'
     } if (currentUrl == "/following") {
         following.value = "ml-8 mb-1.5 text-sm border-b border-b-black pb-[18px] tracking-tight"
-        home.value = 'ml-8 text-sm tracking-tight text-gray-500'
+        home.value = 'ml-8 text-sm tracking-tight text-gray-500 hover:text-black'
     }
 }
 
