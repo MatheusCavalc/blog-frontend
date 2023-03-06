@@ -43,7 +43,7 @@ onMounted(getStory)
 
                 <template v-else>
                     <div class="grid grid-cols-3 gap-10">
-                        <div class="col-span-2 mt-28">
+                        <div class="col-span-2 mt-14">
                             <div class="flex flex-row items-left">
                                 <p class="ml-4 block">
                                     <img class="h-12 w-12 rounded-full"

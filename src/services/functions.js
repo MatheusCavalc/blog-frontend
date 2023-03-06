@@ -55,3 +55,16 @@ export function postStory(parameters) {
         console.log(error)
     });
 }
+
+export function updateProfileInfo(parameters) {
+    axios.post(url + 'user/update', parameters).then((response) => {
+        let status = response.data.status;
+        if (status === 'success') {
+            router.push('/me/settings/account')
+        } else {
+            alert('Deu ruim')
+        }
+    }).catch(error => {
+        console.log(error)
+    });
+}

@@ -58,19 +58,19 @@ const unfollow = () => {
             <div v-if="props.can_follow" class="flex mt-5">
                 <template v-if="is_follow">
                     <button @click="unfollow"
-                        class="block px-4 py-2 text-base tracking-tighter text-white bg-gray-500 rounded-full">
+                        class="block px-4 py-2 text-base tracking-tighter text-green-600 bg-white border border-green-600 rounded-full">
                         {{ button_label }}
                     </button>
                 </template>
 
                 <template v-else>
                     <button @click="follow"
-                        class="block px-4 py-2 text-base tracking-tighter text-white bg-gray-500 rounded-full">
+                        class="block px-4 py-2 text-base tracking-tighter text-white bg-green-600 rounded-full">
                         {{ button_label }}
                     </button>
                 </template>
 
-                <button class="block ml-2 px-2.5 py-1 text-base tracking-tight text-white bg-gray-500 rounded-full">
+                <button class="block ml-2 px-2.5 py-1 text-base tracking-tight text-white bg-green-600 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"

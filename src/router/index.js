@@ -3,49 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 let authUser = localStorage.getItem("bearerToken") === null ? false : true
 
 const routes = [
-  {
-    path: '/home',
-    name: 'index',
-    component: () => import(/* webpackChunkName: "about" */ '../views/App/GuestHome.vue'),
-    beforeEnter: (to, from, next) => {
-      if (authUser) {
-        return next({
-          name: 'home'
-        })
-      }
-
-      next()
-    }
-  },
-  {
-    path: '/',
-    name: 'home',
-    component: () => import(/* webpackChunkName: "about" */ '../views/App/AuthHome.vue'),
-    beforeEnter: (to, from, next) => {
-      if (!authUser) {
-        return next({
-          name: 'index'
-        })
-      }
-
-      next()
-    }
-  },
-  {
-    path: '/following',
-    name: 'following',
-    component: () => import(/* webpackChunkName: "about" */ '../views/App/FollowingHome.vue'),
-    beforeEnter: (to, from, next) => {
-      if (!authUser) {
-        return next({
-          name: 'index'
-        })
-      }
-
-      next()
-    }
-  },
-  {
+  { //login
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "about" */ '../views/Auth/LoginView.vue'),
@@ -59,7 +17,7 @@ const routes = [
       next()
     }
   },
-  {
+  { //register
     path: '/register',
     name: 'register',
     component: () => import(/* webpackChunkName: "about" */ '../views/Auth/RegisterView.vue'),
@@ -73,7 +31,49 @@ const routes = [
       next()
     }
   },
-  {
+  { //home (guest)
+    path: '/home',
+    name: 'index',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/GuestHome.vue'),
+    beforeEnter: (to, from, next) => {
+      if (authUser) {
+        return next({
+          name: 'home'
+        })
+      }
+
+      next()
+    }
+  },
+  { //home (auth)
+    path: '/',
+    name: 'home',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/AuthHome.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!authUser) {
+        return next({
+          name: 'index'
+        })
+      }
+
+      next()
+    }
+  },
+  { //home following (auth)
+    path: '/following',
+    name: 'following',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/FollowingHome.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!authUser) {
+        return next({
+          name: 'index'
+        })
+      }
+
+      next()
+    }
+  },
+  { //new story (editor)
     path: '/new-story',
     name: 'new_story',
     component: () => import(/* webpackChunkName: "about" */ '../views/App/Editor/EditorView.vue'),
@@ -87,7 +87,7 @@ const routes = [
       next()
     }
   },
-  {
+  { //confirm story (editor)
     path: '/confirm-story',
     name: 'confirm_story',
     component: () => import(/* webpackChunkName: "about" */ '../views/App/Editor/ConfirmStoryView.vue'),
@@ -101,10 +101,38 @@ const routes = [
       next()
     }
   },
-  {
+  { //read story
     path: '/story/:slug/:id',
     name: 'story',
     component: () => import(/* webpackChunkName: "about" */ '../views/App/StoryView.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!authUser) {
+        return next({
+          name: 'index'
+        })
+      }
+
+      next()
+    }
+  },
+  { //profile
+    path: '/profile',
+    name: 'profile',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/Profile/ProfileIndex.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!authUser) {
+        return next({
+          name: 'index'
+        })
+      }
+
+      next()
+    }
+  },
+  { //profile
+    path: '/me/settings/account',
+    name: 'setting-account',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/Profile/SettingAccount.vue'),
     beforeEnter: (to, from, next) => {
       if (!authUser) {
         return next({
