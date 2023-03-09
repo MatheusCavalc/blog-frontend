@@ -21,7 +21,7 @@ const postContent = () => {
 
 <template>
     <EditorLayout>
-        <div class="mx-auto mt-2 max-w-7xl sm:px-6 lg:px-28">
+        <div class="mx-auto mt-2 max-w-7xl sm:px-6 lg:px-28 pb-20">
             <div class="px-32 pt-10 pb-32 overflow-hidden bg-white sm:rounded-lg">
 
                 <div class="title">
