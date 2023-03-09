@@ -7,6 +7,7 @@ import HeaderHome from '@/components/HeaderHome.vue';
 import axios from 'axios';
 import moment from 'moment';
 
+let id = ref('')
 let stories = ref('')
 
 let loading = ref('')
@@ -15,7 +16,8 @@ loading.value = true
 const getStories = () => {
     axios.get('http://localhost/api/stories')
         .then((response) => {
-            stories.value = response.data
+            id.value = response.data.id
+            stories.value = response.data.stories
             loading.value = false
         })
 }
@@ -47,7 +49,19 @@ onMounted(getStories)
                                                 src="https://avatars.githubusercontent.com/u/105112560?v=4"
                                                 alt="sexmaster" />
                                         </p>
-                                        <p class="block ml-2 text-sm">{{ story.editor_name }}</p>
+                                        <p class="block ml-2 text-sm">
+                                            <template v-if="id == story.author.id">
+                                                <router-link to="/profile">
+                                                    {{ story.author.name }} 
+                                                </router-link>
+                                            </template>
+                                             
+                                            <template v-else>
+                                                <router-link :to="'/' + story.author.username">
+                                                    {{ story.author.name }} 
+                                                </router-link>
+                                            </template>
+                                        </p>
                                         <p class="block mx-1 -my-1 text-gray-500">.</p>
                                         <p class="block text-sm text-gray-500">
                                             {{ moment(story.created_at).format('MMMM D,YYYY') }}
@@ -66,7 +80,7 @@ onMounted(getStories)
                                                     </div>
 
                                                     <div class="my-2 session-content">
-                                                        <p class="font-light text-base text-gray-800 tracking-normal">{{
+                                                        <p class="font-light text-gray-800 tracking-normal">{{
                                                             story.content_preview }}</p>
                                                     </div>
                                                 </div>
@@ -107,7 +121,7 @@ onMounted(getStories)
 .session-title {
     font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: rgb(41, 41, 41);
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 700;
     line-height: 28px;
     letter-spacing: 0px;
@@ -120,7 +134,7 @@ onMounted(getStories)
     font-family: source-serif-pro, Georgia, Cambria, "Times New Roman", Times, serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 19px;
+    font-size: 18px;
     height: 70px;
     width: 480px;
     line-height: 24px;

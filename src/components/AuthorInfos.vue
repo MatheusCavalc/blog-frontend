@@ -2,7 +2,7 @@
 import { defineProps, ref } from 'vue';
 import axios from 'axios';
 
-const props = defineProps(['name', 'userId', 'is_follow', 'can_follow']);
+const props = defineProps(['authId', 'user', 'is_follow', 'can_follow']);
 
 let button_label = ref('')
 let is_follow = ref('')
@@ -13,7 +13,7 @@ is_follow.value = props.is_follow ? true : false
 const follow = () => {
     event.preventDefault()
     axios.post('http://localhost/api/follows', {
-        userId: props.userId,
+        userId: props.user.id,
     }).then(() => {
         button_label.value = 'Unfollow'
         is_follow.value = true
@@ -25,7 +25,7 @@ const follow = () => {
 const unfollow = () => {
     event.preventDefault()
     axios.post('http://localhost/api/unfollows', {
-        userId: props.userId,
+        userId: props.user.id,
     }).then(() => {
         button_label.value = 'Follow'
         is_follow.value = false
@@ -36,7 +36,7 @@ const unfollow = () => {
 </script>
 
 <template>
-    <div class="mt-28 ml-10 mr-3">
+    <div class="">
         <div class="">
             <p>
                 <img class="h-24 w-24 rounded-full" src="https://avatars.githubusercontent.com/u/105112560?v=4"
@@ -44,7 +44,13 @@ const unfollow = () => {
             </p>
 
             <p class="mt-4 font-medium">
-                {{ props.name }}
+                <template v-if="props.authId == props.user.id">
+                    <router-link to="/profile">{{ props.user.name }}</router-link>
+                </template>
+
+                <template v-else>
+                    <router-link :to="'/' + props.user.username">{{ props.user.name }}</router-link>
+                </template>
             </p>
 
             <p class="mt-1 text-gray-500">
@@ -52,7 +58,7 @@ const unfollow = () => {
             </p>
 
             <p class="mt-3 text-gray-500 text-sm tracking-tight">
-                Front End Engineer @ Glovo // Vue.js Athens Meetup Coorganizer
+                {{ props.user.bio }}
             </p>
 
             <div v-if="props.can_follow" class="flex mt-5">

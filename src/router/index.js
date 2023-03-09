@@ -142,6 +142,20 @@ const routes = [
 
       next()
     }
+  },
+  { //user page (other users)
+    path: '/:username',
+    name: 'user page',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/User/UserIndex.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!authUser) {
+        return next({
+          name: 'index'
+        })
+      }
+
+      next()
+    }
   }
 ]
 

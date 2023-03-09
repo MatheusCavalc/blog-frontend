@@ -44,8 +44,7 @@ const updateInfos = () => {
 
                     <input type="text" v-model="username" id="username"
                         class="block py-1.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b border-black appearance-none focus:outline-none focus:ring-0 focus:border-black peer" />
-                    <p class="text-sm text-gray-600 mt-1">Appears on your Profile page, as your byline, and in your
-                        responses.</p>
+                    <p class="text-sm text-gray-600 mt-1">local.com/{{ username }}</p>
                 </div>
 
                 <div class="flex flex-row-reverse mt-10">

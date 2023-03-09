@@ -10,7 +10,7 @@ let current = "ml-8 mb-1.5 text-sm border-b border-b-black pb-[17px] tracking-ti
 let not_current = "ml-8 text-sm tracking-tight text-gray-500 hover:text-black"
 
 const style = () => {
-    if (currentUrl == "/profile") {
+    if (currentUrl == "/profile" || currentUrl.startsWith('/@')) {
         home.value = 'mb-1.5 text-sm border-b border-b-black pb-[17px] tracking-tight'
         list.value = not_current
         about.value = not_current

@@ -13,6 +13,8 @@ const route = useRoute()
 
 let id = route.params.id
 
+let authId = ref('')
+let user = ref('')
 let is_follow = ref('')
 let story = ref('')
 let loading = ref('')
@@ -21,6 +23,8 @@ loading.value = true
 
 const getStory = () => {
     axios.get('http://localhost/api/stories/' + id).then((response) => {
+        authId.value = response.data.authId
+        user.value = response.data.user
         story.value = response.data.story
         loading.value = false
         is_follow.value = response.data.is_follow
@@ -50,18 +54,30 @@ onMounted(getStory)
                                         src="https://avatars.githubusercontent.com/u/105112560?v=4" alt="sexmaster" />
                                 </p>
                                 <div class="absolute ml-20">
-                                    <p class="block">{{ story.editor_name }}</p>
+                                    <template v-if="authId == user.id">
+                                        <router-link to="/profile">
+                                            <p class="block">{{ user.name }}</p>
+                                        </router-link>
+                                    </template>
+
+                                    <template v-else>
+                                        <router-link :to="'/' + user.username">
+                                            <p class="block">{{ user.name }}</p>
+                                        </router-link>
+                                    </template>
+
                                     <p class="mt-0.5 text-gray-500">{{ moment(story.created_at).format('MMM D, YYYY') }}</p>
                                 </div>
                             </div>
                             <div class="my-7">
                                 <div class="">
-                                    <QuillEditor v-model:content="story.title" contentType="html" readOnly="true" theme="bubble"
-                                        :toolbar="[[{ 'header': 2 }]]" />
+                                    <QuillEditor v-model:content="story.title" contentType="html" readOnly="true"
+                                        theme="bubble" :toolbar="[[{ 'header': 2 }]]" />
                                 </div>
 
                                 <div id="text" class="session-read -mt-1 my-5">
-                                    <QuillEditor v-model:content="story.content" contentType="html" readOnly="true" theme="bubble"
+                                    <QuillEditor v-model:content="story.content" contentType="html" readOnly="true"
+                                        theme="bubble"
                                         :toolbar="[['bold', 'italic', 'link'], [{ 'header': 1 }, { 'header': 2 }, 'blockquote'], ['image']]" />
                                 </div>
 
@@ -75,7 +91,10 @@ onMounted(getStory)
                         </div>
 
                         <div class="border-l border-l-gray-200 h-screen">
-                            <AuthorInfos :name="story.editor_name" :userId="story.user_id" :is_follow="is_follow" :can_follow="can_follow" />
+                            <div class="mt-28 ml-10 mr-3">
+                                <AuthorInfos :authId="authId" :user="user" :is_follow="is_follow"
+                                    :can_follow="can_follow" />
+                            </div>
                         </div>
                     </div>
                 </template>
