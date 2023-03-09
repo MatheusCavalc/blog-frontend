@@ -53,7 +53,7 @@ onMounted(style)
     <div class="sticky top-0 bg-white border-b border-b-gray-200 pb-3.5 mt-10 mr-16">
         <div class="pt-4">
             <span :class="account">
-                <router-link to="/profile">Account</router-link>
+                <router-link to="/me/settings/account">Account</router-link>
             </span>
             <span :class="publishing">
                 <router-link to="/">Publishing</router-link>
