@@ -86,7 +86,7 @@ onMounted(getStories)
                                 <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }">
                                     <p class="mt-3 text-xl font-extrabold tracking-tighter">{{ story.title_preview }}</p>
                                 </router-link>
-                                <p class="mt-2 text-sm">{{ story.content_preview }} {{ story.id }}</p>
+                                <p class="mt-2 text-sm">{{ story.content_preview }}</p>
 
                                 <div class="mt-10 mb-11 flex justify-between">
                                     <p
