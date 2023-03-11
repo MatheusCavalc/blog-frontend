@@ -2,11 +2,14 @@
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import HeaderProfile from '@/components/HeaderProfile.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import DeleteStoryModal from '@/components/Modals/DeleteStoryModal.vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import axios from 'axios';
 import moment from 'moment';
 import { ref, onMounted } from 'vue';
 
+let storyId = ref('')
+let modalDeleteStory = ref(false)
 let my_stories = ref('')
 let user_name = ref('')
 let loading = ref('')
@@ -19,6 +22,11 @@ const getStories = () => {
             user_name.value = response.data.user_name
             loading.value = false
         })
+}
+
+const toggleModalDeleteStory = (id) => {
+    storyId.value = id
+    modalDeleteStory.value = !modalDeleteStory.value
 }
 
 onMounted(getStories)
@@ -73,17 +81,89 @@ onMounted(getStories)
 
                             <HeaderProfile />
 
-                            <div v-for="story in my_stories" :key="story.id" class="mt-12 border-b border-b-gray-200">
+                            <div v-for="story in my_stories" :key="story.id" class="mt-12 border-b border-b-gray-200 mr-16">
                                 <p class="text-gray-500">{{ moment(story.created_at).format('MMMM D,YYYY') }}</p>
                                 <router-link :to="{ path: 'story/' + story.slug + '/' + story.id }">
-                                    <p class="mt-5 text-3xl font-extrabold tracking-tighter">{{ story.title_preview }}</p>
+                                    <p class="mt-3 text-xl font-extrabold tracking-tighter">{{ story.title_preview }}</p>
                                 </router-link>
-                                <p class="mt-8 mb-24 text-lg">{{ story.content_preview }}</p>
+                                <p class="mt-2 text-sm">{{ story.content_preview }} {{ story.id }}</p>
+
+                                <div class="mt-10 mb-11 flex justify-between">
+                                    <p
+                                        class="block bg-gray-100 text-gray-800 text-center text-xs mr-2 px-2.5 py-1 rounded-full">
+                                        {{ story.tags[0] }}
+                                    </p>
+
+                                    <Menu as="div" class="relative inline-block text-left">
+                                        <div>
+                                            <MenuButton
+                                                class="font-medium tracking-tighter text-2xl text-gray-900 hover:text-black">
+                                                ...
+                                            </MenuButton>
+                                        </div>
+
+                                        <transition enter-active-class="transition duration-100 ease-out"
+                                            enter-from-class="transform scale-95 opacity-0"
+                                            enter-to-class="transform scale-100 opacity-100"
+                                            leave-active-class="transition duration-75 ease-in"
+                                            leave-from-class="transform scale-100 opacity-100"
+                                            leave-to-class="transform scale-95 opacity-0">
+                                            <MenuItems
+                                                class="-top-2 transform -translate-y-full absolute -right-14 w-32 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                <div class="px-1 py-1">
+                                                    <MenuItem v-slot="{ active }">
+                                                    <router-link :to="'/p/' + story.id + '/edit'"
+                                                        :class="[active ? 'bg-gray-100' : '', 'block pl-2 py-2 text-left text-sm text-gray-700']">
+                                                        Edit story
+                                                    </router-link>
+                                                    </MenuItem>
+                                                    <MenuItem v-slot="{ active }">
+                                                    <a href="/profile"
+                                                        :class="[active ? 'bg-gray-100' : '', 'block pl-2 py-2 text-left text-sm text-gray-700']">
+                                                        Pin story
+                                                    </a>
+                                                    </MenuItem>
+                                                </div>
+                                                <div class="px-1 py-1">
+                                                    <MenuItem v-slot="{ active }">
+                                                    <a href="/profile"
+                                                        :class="[active ? 'bg-gray-100' : '', 'block pl-2 py-2 text-left text-sm text-gray-700']">
+                                                        Story settings
+                                                    </a>
+                                                    </MenuItem>
+                                                    <MenuItem v-slot="{ active }">
+                                                    <a href="/profile"
+                                                        :class="[active ? 'bg-gray-100' : '', 'block pl-2 py-2 text-left text-sm text-gray-700']">
+                                                        Story stats
+                                                    </a>
+                                                    </MenuItem>
+                                                </div>
+
+                                                <div class="px-1 py-1">
+                                                    <MenuItem v-slot="{ active }">
+                                                    <a href="/profile"
+                                                        :class="[active ? 'bg-gray-100' : '', 'block pl-2 py-2 text-left text-sm text-gray-700']">
+                                                        Hide responses
+                                                    </a>
+                                                    </MenuItem>
+                                                    <MenuItem v-slot="{ active }">
+                                                    <a @click="toggleModalDeleteStory(story.id)" href="#"
+                                                        :class="[active ? 'bg-gray-100' : '', 'block pl-2 py-2 text-left text-sm text-red-700']">
+                                                        Delete story
+                                                    </a>
+                                                    </MenuItem>
+                                                </div>
+                                            </MenuItems>
+                                        </transition>
+                                    </Menu>
+                                    <DeleteStoryModal :modalActive="modalDeleteStory" :story_id="storyId"
+                                        @close-modal="toggleModalDeleteStory" @reload-page="getStories" />
+                                </div>
                             </div>
                         </template>
                     </div>
 
-                    <div class="border-l border-l-gray-200 h-screen">
+                    <div class="border-l border-l-gray-200 h-full">
                         <div class="mt-11 ml-10 mr-3">
                             <p>
                                 <img class="h-24 w-24 rounded-full"

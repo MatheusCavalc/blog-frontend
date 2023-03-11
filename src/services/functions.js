@@ -56,6 +56,34 @@ export function postStory(parameters) {
     });
 }
 
+export function putStory(id, parameters) {
+    axios.put(url + 'stories/' + id, parameters).then((response) => {
+        console.log(response)
+        let status = response.data.status
+        let url = response.data.redirect
+        if (status === 'success') {
+            window.location.replace('/story/' + url);
+        } else {
+            router.push('/profile')
+        }
+    }).catch(error => {
+        console.log(error)
+    });
+}
+
+export function deleteStory(id) {
+    axios.delete('http://localhost/api/stories/' + id).then((response) => {
+        let status = response.data.status
+        if (status === 'success') {
+            router.push('/profile')
+        } else {
+            router.push('/profile')
+        }
+    }).catch(error => {
+        console.log(error)
+    });
+}
+
 export function updateProfileInfo(parameters) {
     axios.post(url + 'user/update', parameters).then((response) => {
         let status = response.data.status;

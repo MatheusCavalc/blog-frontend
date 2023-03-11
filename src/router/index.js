@@ -87,6 +87,20 @@ const routes = [
       next()
     }
   },
+  { //edit story (editor)
+    path: '/p/:id/edit',
+    name: 'edit_story',
+    component: () => import(/* webpackChunkName: "about" */ '../views/App/Editor/EditorEditView.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!authUser) {
+        return next({
+          name: 'index'
+        })
+      }
+
+      next()
+    }
+  },
   { //confirm story (editor)
     path: '/confirm-story',
     name: 'confirm_story',
